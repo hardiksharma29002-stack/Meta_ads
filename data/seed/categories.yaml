@@ -1,0 +1,94 @@
+taxonomy_version: 1
+categories:
+  - slug: real-estate
+    name: "Real Estate & Construction"
+    subcategories:
+      - slug: residential-properties
+        name: "Residential Properties"
+      - slug: commercial-real-estate
+        name: "Commercial Real Estate"
+      - slug: interior-design
+        name: "Interior Design & Architecture"
+
+  - slug: jewellery
+    name: "Jewellery & Accessories"
+    subcategories:
+      - slug: gold-diamond-jewellery
+        name: "Gold & Diamond Jewellery"
+      - slug: silver-artificial-jewellery
+        name: "Silver & Fashion Jewellery"
+      - slug: watches-eyewear
+        name: "Watches & Eyewear"
+
+  - slug: fashion-apparel
+    name: "Fashion & Apparel"
+    subcategories:
+      - slug: ethnic-wear
+        name: "Ethnic & Bridal Wear"
+      - slug: western-wear
+        name: "Western Wear & Fast Fashion"
+      - slug: textiles-handicrafts
+        name: "Textiles & Handloom"
+
+  - slug: education-coaching
+    name: "Education & Career"
+    subcategories:
+      - slug: test-prep-coaching
+        name: "Competitive Exam Coaching (JEE/NEET/UPSC)"
+      - slug: higher-education-colleges
+        name: "Colleges & Universities"
+      - slug: k12-schools
+        name: "Schools & Early Learning"
+      - slug: edtech-skill-development
+        name: "EdTech & Vocational Training"
+
+  - slug: healthcare-clinics
+    name: "Healthcare & Wellness"
+    subcategories:
+      - slug: hospitals-multispeciality
+        name: "Hospitals & Diagnostics"
+      - slug: dental-ayurveda
+        name: "Dental, Ayurveda & Homoeopathy"
+      - slug: fitness-gyms
+        name: "Fitness Centres & Gyms"
+      - slug: beauty-salons
+        name: "Beauty Salons & Dermatology"
+
+  - slug: food-hospitality
+    name: "Food, Dining & Hospitality"
+    subcategories:
+      - slug: restaurants-cafes
+        name: "Restaurants & Cafes"
+      - slug: catering-sweets
+        name: "Catering, Bakeries & Sweets"
+      - slug: hotels-resorts
+        name: "Hotels, Resorts & Venues"
+
+  - slug: automotive
+    name: "Automotive & Mobility"
+    subcategories:
+      - slug: car-bike-dealerships
+        name: "Car & Two-Wheeler Dealerships"
+      - slug: ev-solar
+        name: "Electric Vehicles & Solar Energy"
+
+  - slug: b2b-services
+    name: "B2B, Logistics & IT"
+    subcategories:
+      - slug: digital-marketing-agencies
+        name: "Digital Marketing Agencies"
+      - slug: software-it-services
+        name: "IT & Software Development"
+      - slug: manufacturing-industrial
+        name: "Manufacturing & Industrial Equipment"
+      - slug: logistics-packaging
+        name: "Logistics, Packers & Movers"
+
+  - slug: finance-insurance
+    name: "Finance & Advisory (Sensitive)"
+    subcategories:
+      - slug: loans-credit
+        name: "Personal & Business Loans"
+      - slug: wealth-tax-consulting
+        name: "CA, Tax & Wealth Management"
+

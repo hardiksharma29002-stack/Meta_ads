@@ -1,0 +1,110 @@
+services:
+  infra-db:
+    image: postgres:16-alpine
+    container_name: adatlas-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: adatlas_dev
+      POSTGRES_USER: adatlas
+      POSTGRES_PASSWORD: adatlas_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adatlas -d adatlas_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: adatlas-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: adatlas-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.backend
+    container_name: adatlas-api
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      infra-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.backend
+    container_name: adatlas-worker
+    restart: unless-stopped
+    command: celery -A app.workers.celery_app worker -l INFO -Q q.collect,q.normalize,q.geo,q.enrich,q.classify,q.analytics,q.export,q.default
+    env_file: .env
+    depends_on:
+      infra-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  beat:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.backend
+    container_name: adatlas-beat
+    restart: unless-stopped
+    command: celery -A app.workers.celery_app beat -l INFO
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../infra/Dockerfile.frontend
+    container_name: adatlas-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file: .env
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+  redisdata:
+  miniodata:
+

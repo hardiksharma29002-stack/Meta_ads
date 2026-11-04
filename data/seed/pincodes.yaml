@@ -1,0 +1,126 @@
+# Core Postal PIN Codes mapping for the 5 Cities
+# Format: pincode, city_slug, locality, is_core
+
+pincodes:
+  # Mumbai (400xxx)
+  - pincode: "400001"
+    city: "mumbai"
+    locality: "Fort / Colaba"
+    is_core: true
+  - pincode: "400050"
+    city: "mumbai"
+    locality: "Bandra West"
+    is_core: true
+  - pincode: "400053"
+    city: "mumbai"
+    locality: "Andheri West"
+    is_core: true
+  - pincode: "400078"
+    city: "mumbai"
+    locality: "Bhandup / Mulund"
+    is_core: true
+  - pincode: "400703"
+    city: "mumbai"
+    locality: "Vashi (Navi Mumbai Satellite)"
+    is_core: false
+  - pincode: "400601"
+    city: "mumbai"
+    locality: "Thane West (Satellite)"
+    is_core: false
+
+  # Delhi (110xxx)
+  - pincode: "110001"
+    city: "delhi"
+    locality: "Connaught Place"
+    is_core: true
+  - pincode: "110016"
+    city: "delhi"
+    locality: "Hauz Khas"
+    is_core: true
+  - pincode: "110024"
+    city: "delhi"
+    locality: "Lajpat Nagar"
+    is_core: true
+  - pincode: "110092"
+    city: "delhi"
+    locality: "Laxmi Nagar"
+    is_core: true
+  - pincode: "122001"
+    city: "delhi"
+    locality: "Gurugram (NCR Satellite)"
+    is_core: false
+  - pincode: "201301"
+    city: "delhi"
+    locality: "Noida Sector 18 (NCR Satellite)"
+    is_core: false
+
+  # Jaipur (302xxx)
+  - pincode: "302001"
+    city: "jaipur"
+    locality: "M.I. Road / Pink City"
+    is_core: true
+  - pincode: "302004"
+    city: "jaipur"
+    locality: "Raja Park"
+    is_core: true
+  - pincode: "302015"
+    city: "jaipur"
+    locality: "Tonk Road / Gopalpura"
+    is_core: true
+  - pincode: "302017"
+    city: "jaipur"
+    locality: "Malviya Nagar"
+    is_core: true
+  - pincode: "302020"
+    city: "jaipur"
+    locality: "Mansarovar"
+    is_core: true
+  - pincode: "302021"
+    city: "jaipur"
+    locality: "Vaishali Nagar"
+    is_core: true
+
+  # Kolkata (700xxx)
+  - pincode: "700001"
+    city: "kolkata"
+    locality: "BBD Bagh / Dalhousie"
+    is_core: true
+  - pincode: "700019"
+    city: "kolkata"
+    locality: "Ballygunge"
+    is_core: true
+  - pincode: "700029"
+    city: "kolkata"
+    locality: "Kalighat"
+    is_core: true
+  - pincode: "700091"
+    city: "kolkata"
+    locality: "Salt Lake Sector V"
+    is_core: false
+  - pincode: "711101"
+    city: "kolkata"
+    locality: "Howrah (Satellite)"
+    is_core: false
+
+  # Bengaluru (560xxx)
+  - pincode: "560001"
+    city: "bengaluru"
+    locality: "MG Road / Brigade Road"
+    is_core: true
+  - pincode: "560034"
+    city: "bengaluru"
+    locality: "Koramangala"
+    is_core: true
+  - pincode: "560038"
+    city: "bengaluru"
+    locality: "Indiranagar"
+    is_core: true
+  - pincode: "560066"
+    city: "bengaluru"
+    locality: "Whitefield"
+    is_core: true
+  - pincode: "560100"
+    city: "bengaluru"
+    locality: "Electronic City"
+    is_core: true
+

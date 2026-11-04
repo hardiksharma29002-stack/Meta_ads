@@ -1,0 +1,60 @@
+- slug: mumbai
+  name: Mumbai
+  state_name: Maharashtra
+  gst_state_code: "27"
+  std_code: "022"
+  lat: 18.9388
+  lon: 72.8354
+  urban_population: 12442373
+  population_source: "MoHUA_Census_BMC"
+  population_year: 2024
+  is_active: true
+
+- slug: delhi
+  name: Delhi
+  state_name: Delhi (NCT)
+  gst_state_code: "07"
+  std_code: "011"
+  lat: 28.6139
+  lon: 77.2090
+  urban_population: 16787941
+  population_source: "MoHUA_Census_NCT"
+  population_year: 2024
+  is_active: true
+
+- slug: jaipur
+  name: Jaipur
+  state_name: Rajasthan
+  gst_state_code: "08"
+  std_code: "0141"
+  lat: 26.9124
+  lon: 75.7873
+  urban_population: 3046163
+  population_source: "MoHUA_Census_UA"
+  population_year: 2024
+  is_active: true
+
+- slug: kolkata
+  name: Kolkata
+  state_name: West Bengal
+  gst_state_code: "19"
+  std_code: "033"
+  lat: 22.5726
+  lon: 88.3639
+  urban_population: 4496694
+  population_source: "MoHUA_Census_KMC"
+  population_year: 2024
+  is_active: true
+
+- slug: bengaluru
+  name: Bengaluru
+  state_name: Karnataka
+  gst_state_code: "29"
+  std_code: "080"
+  lat: 12.9716
+  lon: 77.5946
+  urban_population: 8443675
+  population_source: "MoHUA_Census_BBMP"
+  population_year: 2024
+  is_active: true
+
