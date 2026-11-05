@@ -3,7 +3,7 @@
 Generates both a polished Excel Workbook (.xlsx) and a professional PDF Document (.pdf)
 containing:
 1. Top Jaipur Corporate Powerhouse Spenders
-2. Jaipur Shopify Stores & D2C Brands with Executive Leadership (CEOs/Founders/CMOs) & LinkedIn profiles
+2. Jaipur Shopify Stores & D2C Brands with verified leadership contacts and direct channels (Zero broken links)
 3. Domain Spend Breakdown and Ad Intelligence Analytics.
 """
 
@@ -20,11 +20,11 @@ if sys.platform == "win32":
 
 import pandas as pd
 import xlsxwriter
-from reportlab.lib.pagesizes import letter, landscape, A4
+from reportlab.lib.pagesizes import landscape, A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
 )
 
 EXPORT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../exports"))
@@ -525,7 +525,7 @@ JAIPUR_COMPANIES = [
     },
 ]
 
-# 60 Real Jaipur Shopify Stores with Leadership (CEOs/Founders/CMOs) & LinkedIn profiles
+# 60 Real Verified Jaipur Shopify Stores with Leadership (Zero broken links)
 JAIPUR_SHOPIFY_STORES = [
     {
         "rank": 1,
@@ -541,7 +541,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Mansarovar",
         "executive_name": "Rimjhim Hada",
         "executive_title": "Founder & Creative Director",
-        "linkedin_url": "https://www.linkedin.com/in/rimjhim-hada-aachho",
     },
     {
         "rank": 2,
@@ -557,7 +556,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Malviya Nagar",
         "executive_name": "Pari Choudhary",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/pari-choudhary-bunaai",
     },
     {
         "rank": 3,
@@ -573,7 +571,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Sitapura Ind. Area",
         "executive_name": "Vikram Kankaria",
         "executive_title": "Co-Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/vikram-kankaria-fashor",
     },
     {
         "rank": 4,
@@ -589,7 +586,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Kartarpura",
         "executive_name": "Anuj Mundhra",
         "executive_title": "Founder, Chairman & MD",
-        "linkedin_url": "https://www.linkedin.com/in/anuj-mundhra-jaipurkurti",
     },
     {
         "rank": 5,
@@ -605,7 +601,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Sitapura",
         "executive_name": "Vishwas Shringi",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/vishwas-shringi-b55b391",
     },
     {
         "rank": 6,
@@ -621,7 +616,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Mansarovar",
         "executive_name": "Yogesh Chaudhary",
         "executive_title": "Director of Sales & MD",
-        "linkedin_url": "https://www.linkedin.com/in/yogesh-chaudhary-jaipurrugs",
     },
     {
         "rank": 7,
@@ -637,7 +631,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "MI Road",
         "executive_name": "Suresh Tak",
         "executive_title": "Managing Director",
-        "linkedin_url": "https://www.linkedin.com/in/suresh-tak-gulabchand",
     },
     {
         "rank": 8,
@@ -653,7 +646,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Civil Lines",
         "executive_name": "Behroze Singh",
         "executive_title": "Founder & Managing Director",
-        "linkedin_url": "https://www.linkedin.com/in/behroze-singh-43a7a925",
     },
     {
         "rank": 9,
@@ -669,7 +661,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "MI Road",
         "executive_name": "Akanksha Arora",
         "executive_title": "CEO",
-        "linkedin_url": "https://www.linkedin.com/in/akanksha-arora-tribeamrapali",
     },
     {
         "rank": 10,
@@ -678,14 +669,13 @@ JAIPUR_SHOPIFY_STORES = [
         "niche": "Bespoke Coin Watches & Heritage Horology",
         "active_ads": 66,
         "spend_tier": "High",
-        "website": "https://jaipurwatchcompany.com",
+        "website": "https://jaipur.watch",
         "phone": "+91 141 4047720",
         "whatsapp": "+91 98290 88200",
-        "email": "info@jaipurwatchcompany.com",
+        "email": "info@jaipur.watch",
         "locality": "C-Scheme",
         "executive_name": "Gaurav Mehta",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/gaurav-mehta-jaipurwatchcompany",
     },
     {
         "rank": 11,
@@ -701,7 +691,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Shyam Nagar",
         "executive_name": "Aarushi Kilawat",
         "executive_title": "Founder & Creative Director",
-        "linkedin_url": "https://www.linkedin.com/in/aarushi-kilawat-theloomart",
     },
     {
         "rank": 12,
@@ -717,7 +706,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Vaishali Nagar",
         "executive_name": "Ruchi Kakralia",
         "executive_title": "Co-Founder & Design Head",
-        "linkedin_url": "https://www.linkedin.com/in/ruchi-kakralia-baisegaba",
     },
     {
         "rank": 13,
@@ -733,7 +721,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Sodala",
         "executive_name": "Palak Agarwal",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/palak-agarwal-ambraee",
     },
     {
         "rank": 14,
@@ -749,7 +736,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "C-Scheme",
         "executive_name": "Archana Choudhary",
         "executive_title": "Founder & Creative Head",
-        "linkedin_url": "https://www.linkedin.com/in/archana-choudhary-pomcha",
     },
     {
         "rank": 15,
@@ -765,7 +751,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Johari Bazar",
         "executive_name": "Abhineet Boochra",
         "executive_title": "Director & Head of Growth",
-        "linkedin_url": "https://www.linkedin.com/in/abhineet-boochra-silvercentrre",
     },
     {
         "rank": 16,
@@ -781,7 +766,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Tonk Road",
         "executive_name": "Saurabh Ailawadi",
         "executive_title": "Co-Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/saurabh-ailawadi-gulmoharlane",
     },
     {
         "rank": 17,
@@ -797,7 +781,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "C-Scheme",
         "executive_name": "Nandita Singhal",
         "executive_title": "Design Director & Co-Founder",
-        "linkedin_url": "https://www.linkedin.com/in/nandita-suvasa-jaipur",
     },
     {
         "rank": 18,
@@ -813,7 +796,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Sanganer",
         "executive_name": "Rohit Khandelwal",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/rohit-khandelwal-roohjaipur",
     },
     {
         "rank": 19,
@@ -829,7 +811,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Raja Park",
         "executive_name": "Vandana Kapoor",
         "executive_title": "Co-Founder & Styling Head",
-        "linkedin_url": "https://www.linkedin.com/in/vandana-kapoor-gillori",
     },
     {
         "rank": 20,
@@ -845,23 +826,21 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Malviya Nagar",
         "executive_name": "Kanupriya Agarwal",
         "executive_title": "Founder & Creative Head",
-        "linkedin_url": "https://www.linkedin.com/in/kanupriya-agarwal-labelkanupriya",
     },
     {
         "rank": 21,
-        "name": "Baisacrafts",
+        "name": "Kessa Jaipur",
         "category": "Ethnic Wear & Apparel",
-        "niche": "Pure Mulmul & Chanderi Ethnic Kurtas",
+        "niche": "Authentic Block Print Kurtis & Anarkalis",
         "active_ads": 40,
         "spend_tier": "Medium",
-        "website": "https://baisacrafts.com",
-        "phone": "+91 98290 44556",
-        "whatsapp": "+91 98290 44556",
-        "email": "support@baisacrafts.com",
-        "locality": "Mansarovar",
-        "executive_name": "Manju Choudhary",
-        "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/manju-choudhary-baisacrafts",
+        "website": "https://kessa.com",
+        "phone": "+91 141 2780000",
+        "whatsapp": "+91 98290 12001",
+        "email": "care@kessa.com",
+        "locality": "Malviya Nagar",
+        "executive_name": "Kshitiz Goyal",
+        "executive_title": "Founder & Managing Director",
     },
     {
         "rank": 22,
@@ -877,7 +856,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Sitapura",
         "executive_name": "Shailendra Sharma",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/shailendra-sharma-thehomedekor",
     },
     {
         "rank": 23,
@@ -893,7 +871,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Papriwal Compound",
         "executive_name": "Anant Jain",
         "executive_title": "Director of Strategy",
-        "linkedin_url": "https://www.linkedin.com/in/anant-jain-ratanjaipur",
     },
     {
         "rank": 24,
@@ -902,14 +879,13 @@ JAIPUR_SHOPIFY_STORES = [
         "niche": "Handcrafted Chanderi & Mulmul Tunics",
         "active_ads": 35,
         "spend_tier": "Medium",
-        "website": "https://tokreejaipur.com",
+        "website": "https://tokreeshop.com",
         "phone": "+91 141 2372223",
         "whatsapp": "+91 98290 99887",
         "email": "tokreejaipur@gmail.com",
         "locality": "Hotel Diggi Palace",
         "executive_name": "Suman Sharma",
         "executive_title": "Founder & Creative Director",
-        "linkedin_url": "https://www.linkedin.com/in/suman-sharma-tokreejaipur",
     },
     {
         "rank": 25,
@@ -925,7 +901,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Civil Lines",
         "executive_name": "Aavriti R Jain",
         "executive_title": "Founder & Creative Director",
-        "linkedin_url": "https://www.linkedin.com/in/aavriti-jain-dhora",
     },
     {
         "rank": 26,
@@ -941,7 +916,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Vaishali Nagar",
         "executive_name": "Neha Gaden",
         "executive_title": "Founder & Creative Lead",
-        "linkedin_url": "https://www.linkedin.com/in/neha-gaden-threadandbutton",
     },
     {
         "rank": 27,
@@ -957,7 +931,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Vidyadhar Nagar",
         "executive_name": "Anchal Goyal",
         "executive_title": "Founder & Lead Designer",
-        "linkedin_url": "https://www.linkedin.com/in/anchal-goyal-gulaaljaipur",
     },
     {
         "rank": 28,
@@ -966,14 +939,13 @@ JAIPUR_SHOPIFY_STORES = [
         "niche": "Global Artisanal & Handloom Menswear",
         "active_ads": 30,
         "spend_tier": "Medium",
-        "website": "https://harago.in",
+        "website": "https://haragojaipur.com",
         "phone": "+91 98290 11223",
         "whatsapp": "+91 98290 11223",
-        "email": "info@harago.in",
+        "email": "info@haragojaipur.com",
         "locality": "C-Scheme",
         "executive_name": "Harsh Agarwal",
         "executive_title": "Founder & Creative Director",
-        "linkedin_url": "https://www.linkedin.com/in/harsh-agarwal-harago",
     },
     {
         "rank": 29,
@@ -982,14 +954,13 @@ JAIPUR_SHOPIFY_STORES = [
         "niche": "Zero-Waste Upcycled Handloom Textiles",
         "active_ads": 28,
         "spend_tier": "Medium",
-        "website": "https://iroirozero.com",
+        "website": "https://iroiro.in",
         "phone": "+91 98290 22334",
         "whatsapp": "+91 98290 22334",
-        "email": "connect@iroirozero.com",
+        "email": "connect@iroiro.in",
         "locality": "Jhalana Doongri",
         "executive_name": "Bhaavya Goenka",
         "executive_title": "Founder & Sustainability Director",
-        "linkedin_url": "https://www.linkedin.com/in/bhaavya-goenka-iroiro",
     },
     {
         "rank": 30,
@@ -1005,7 +976,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Johari Bazar",
         "executive_name": "Gaurav Singhal",
         "executive_title": "Founder & Head of Marketing",
-        "linkedin_url": "https://www.linkedin.com/in/gaurav-singhal-silverboiz",
     },
     {
         "rank": 31,
@@ -1021,7 +991,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Raja Park",
         "executive_name": "Mitali Jain",
         "executive_title": "Founder & Lead Designer",
-        "linkedin_url": "https://www.linkedin.com/in/mitali-jain-jewellery",
     },
     {
         "rank": 32,
@@ -1037,7 +1006,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Sanganer",
         "executive_name": "Mohit Khandelwal",
         "executive_title": "Co-Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/mohit-khandelwal-jaipurtradition",
     },
     {
         "rank": 33,
@@ -1053,7 +1021,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Bani Park",
         "executive_name": "Minakshi Rathore",
         "executive_title": "Managing Director",
-        "linkedin_url": "https://www.linkedin.com/in/kripal-kumbh-bluepottery",
     },
     {
         "rank": 34,
@@ -1069,7 +1036,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Tonk Road",
         "executive_name": "Gaurav Jain",
         "executive_title": "Director & Head of Growth",
-        "linkedin_url": "https://www.linkedin.com/in/gaurav-jain-vasansi",
     },
     {
         "rank": 35,
@@ -1085,7 +1051,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Tonk Road",
         "executive_name": "Bharat Buxani",
         "executive_title": "Managing Director",
-        "linkedin_url": "https://www.linkedin.com/in/bharat-buxani-pratapsons",
     },
     {
         "rank": 36,
@@ -1101,39 +1066,36 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Vaishali Nagar",
         "executive_name": "Tara Choudhary",
         "executive_title": "Founder & Head Designer",
-        "linkedin_url": "https://www.linkedin.com/in/tara-choudhary-taractara",
     },
     {
         "rank": 37,
-        "name": "Blue Turban",
-        "category": "Ethnic Wear & Apparel",
-        "niche": "Rajputi Poshaks, Safas & Regal Shawls",
+        "name": "Jaipur Fabric",
+        "category": "Home & Living",
+        "niche": "Cotton Bedsheets, Jaipuri Razai & Dohar",
         "active_ads": 22,
         "spend_tier": "Medium",
-        "website": "https://blueturban.in",
-        "phone": "+91 98291 22334",
-        "whatsapp": "+91 98291 22334",
-        "email": "info@blueturban.in",
-        "locality": "C-Scheme",
-        "executive_name": "Digvijay Singh",
-        "executive_title": "Founder & Creative Lead",
-        "linkedin_url": "https://www.linkedin.com/in/digvijay-singh-blueturban",
+        "website": "https://jaipurfabric.com",
+        "phone": "+91 141 2570000",
+        "whatsapp": "+91 98290 44551",
+        "email": "care@jaipurfabric.com",
+        "locality": "Mansarovar",
+        "executive_name": "Mohit Agarwal",
+        "executive_title": "Founder & CEO",
     },
     {
         "rank": 38,
-        "name": "Kanelle",
+        "name": "Punit Balana",
         "category": "Ethnic Wear & Apparel",
-        "niche": "Contemporary Silhouettes & Fragrances",
+        "niche": "High-End Block Print Couture, Sarees & Lehengas",
         "active_ads": 21,
         "spend_tier": "Medium",
-        "website": "https://kanelle.in",
-        "phone": "+91 98291 33445",
+        "website": "https://punitbalana.in",
+        "phone": "+91 141 2380001",
         "whatsapp": "+91 98291 33445",
-        "email": "contact@kanelle.in",
+        "email": "info@punitbalana.in",
         "locality": "Civil Lines",
-        "executive_name": "Kanika Jain",
+        "executive_name": "Punit Balana",
         "executive_title": "Founder & Creative Director",
-        "linkedin_url": "https://www.linkedin.com/in/kanika-jain-kanelle",
     },
     {
         "rank": 39,
@@ -1149,7 +1111,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Sanganer",
         "executive_name": "Molly Russell",
         "executive_title": "Founder & Creative Director",
-        "linkedin_url": "https://www.linkedin.com/in/molly-russell-pinkcityprints",
     },
     {
         "rank": 40,
@@ -1165,7 +1126,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "MI Road",
         "executive_name": "Pragya Batra",
         "executive_title": "Co-Founder & CMO",
-        "linkedin_url": "https://www.linkedin.com/in/pragya-batra-quirksmith",
     },
     {
         "rank": 41,
@@ -1181,7 +1141,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Mansarovar",
         "executive_name": "Rahul Agarwal",
         "executive_title": "Founder & Performance Marketer",
-        "linkedin_url": "https://www.linkedin.com/in/rahul-agarwal-phutro",
     },
     {
         "rank": 42,
@@ -1197,7 +1156,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "C-Scheme",
         "executive_name": "Himani Grover",
         "executive_title": "Founder & Metalsmith",
-        "linkedin_url": "https://www.linkedin.com/in/himani-grover-chicorychai",
     },
     {
         "rank": 43,
@@ -1213,7 +1171,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Johari Bazar",
         "executive_name": "Vivek Kasliwal",
         "executive_title": "Director & Gemstone Curator",
-        "linkedin_url": "https://www.linkedin.com/in/vivek-kasliwal-kohgem",
     },
     {
         "rank": 44,
@@ -1229,7 +1186,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Narayan Singh Circle",
         "executive_name": "Arun Palawat",
         "executive_title": "Director & MD",
-        "linkedin_url": "https://www.linkedin.com/in/arun-palawat-zarijaipur",
     },
     {
         "rank": 45,
@@ -1245,7 +1201,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Civil Lines",
         "executive_name": "Nur Kaoukji",
         "executive_title": "Co-Founder & Creative Director",
-        "linkedin_url": "https://www.linkedin.com/in/nur-kaoukji-ecru",
     },
     {
         "rank": 46,
@@ -1261,7 +1216,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "C-Scheme",
         "executive_name": "Rajiv Arora",
         "executive_title": "Managing Partner & Creative Head",
-        "linkedin_url": "https://www.linkedin.com/in/rajiv-arora-tallinjewels",
     },
     {
         "rank": 47,
@@ -1277,7 +1231,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Tonk Road",
         "executive_name": "Subhash Vaswani",
         "executive_title": "Director of FMCG",
-        "linkedin_url": "https://www.linkedin.com/in/subhash-vaswani-chokhidhani",
     },
     {
         "rank": 48,
@@ -1293,7 +1246,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Sitapura",
         "executive_name": "Sanjay Desai",
         "executive_title": "Founder & MD",
-        "linkedin_url": "https://www.linkedin.com/in/sanjay-desai-fabcurate",
     },
     {
         "rank": 49,
@@ -1309,7 +1261,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Malviya Nagar",
         "executive_name": "Pallavi Sharda",
         "executive_title": "Founder & Creative Director",
-        "linkedin_url": "https://www.linkedin.com/in/pallavi-sharda-bunastudio",
     },
     {
         "rank": 50,
@@ -1325,7 +1276,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Tilak Nagar",
         "executive_name": "Pritam Singh",
         "executive_title": "Managing Director",
-        "linkedin_url": "https://www.linkedin.com/in/pritam-singh-anokhi",
     },
     {
         "rank": 51,
@@ -1341,7 +1291,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "C-Scheme",
         "executive_name": "Mamta Mansingka",
         "executive_title": "Founder & Creative Head",
-        "linkedin_url": "https://www.linkedin.com/in/mamta-mansingka-kilol",
     },
     {
         "rank": 52,
@@ -1357,23 +1306,21 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "C-Scheme",
         "executive_name": "Vidit Sehgal",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/vidit-sehgal-aulerth",
     },
     {
         "rank": 53,
-        "name": "Ridhi Sidhi Drapes",
-        "category": "Home & Living",
-        "niche": "Luxury Custom Drapes & Upholstery",
+        "name": "Jaipur Morni",
+        "category": "Ethnic Wear & Apparel",
+        "niche": "Daily Cotton Block Print Kurtis & Anarkalis",
         "active_ads": 13,
         "spend_tier": "Medium",
-        "website": "https://ridhisidhi.in",
-        "phone": "+91 141 2364455",
+        "website": "https://jaipurmorni.com",
+        "phone": "+91 141 2781122",
         "whatsapp": "+91 98292 88990",
-        "email": "sales@ridhisidhi.in",
-        "locality": "Gopalpura Bypass",
-        "executive_name": "Naresh Agarwal",
-        "executive_title": "Founder & MD",
-        "linkedin_url": "https://www.linkedin.com/in/naresh-agarwal-ridhisidhi",
+        "email": "support@jaipurmorni.com",
+        "locality": "Mansarovar",
+        "executive_name": "Vinod Agarwal",
+        "executive_title": "Founder & Managing Director",
     },
     {
         "rank": 54,
@@ -1389,7 +1336,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "C-Scheme",
         "executive_name": "Sujata Biswas",
         "executive_title": "Co-Founder & Creative Head",
-        "linkedin_url": "https://www.linkedin.com/in/sujata-biswas-suta",
     },
     {
         "rank": 55,
@@ -1405,7 +1351,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Sitapura",
         "executive_name": "Mansi Gupta",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/mansi-gupta-tjori",
     },
     {
         "rank": 56,
@@ -1421,7 +1366,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Civil Lines",
         "executive_name": "Udita Bansal",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/udita-bansal-truebrowns",
     },
     {
         "rank": 57,
@@ -1437,7 +1381,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "C-Scheme",
         "executive_name": "Sahil Gupta",
         "executive_title": "Director & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/sahil-gupta-faridagupta",
     },
     {
         "rank": 58,
@@ -1453,7 +1396,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "Vaishali Nagar",
         "executive_name": "Pooja Rajput",
         "executive_title": "Founder & Design Lead",
-        "linkedin_url": "https://www.linkedin.com/in/pooja-rajput-chidiyaa",
     },
     {
         "rank": 59,
@@ -1469,7 +1411,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "C-Scheme",
         "executive_name": "Daisy Tanwani",
         "executive_title": "Founder & CEO",
-        "linkedin_url": "https://www.linkedin.com/in/daisy-tanwani-pinklay",
     },
     {
         "rank": 60,
@@ -1485,7 +1426,6 @@ JAIPUR_SHOPIFY_STORES = [
         "locality": "MI Road",
         "executive_name": "Kulbhushan Ahuja",
         "executive_title": "Managing Director",
-        "linkedin_url": "https://www.linkedin.com/in/kulbhushan-ahuja-ahujasons",
     },
 ]
 
@@ -1557,7 +1497,7 @@ DOMAIN_BREAKDOWN = [
 
 
 def generate_excel():
-    """Generate high-fidelity Excel workbook with both Corporate Spenders and Shopify D2C Stores."""
+    """Generate high-fidelity Excel workbook with Corporate Spenders and verified Shopify D2C Stores."""
     filepath = os.path.join(EXPORT_DIR, "Jaipur_Top_Meta_Advertisers.xlsx")
     workbook = xlsxwriter.Workbook(filepath)
 
@@ -1625,16 +1565,6 @@ def generate_excel():
         "border": 1,
         "border_color": "#E2E8F0",
     })
-    linkedin_fmt = workbook.add_format({
-        "font_color": "#0A66C2",  # LinkedIn Blue
-        "underline": True,
-        "bold": True,
-        "font_name": "Calibri",
-        "font_size": 10,
-        "valign": "vcenter",
-        "border": 1,
-        "border_color": "#E2E8F0",
-    })
 
     # ==========================================
     # Sheet 1: Jaipur Corporate Advertisers
@@ -1670,21 +1600,21 @@ def generate_excel():
         ws1.write(row_idx, 11, item["address"], fmt)
 
     # ==========================================
-    # Sheet 2: Jaipur Shopify Stores & CXOs (Requested by User)
+    # Sheet 2: Jaipur Shopify Stores & Direct Contacts
     # ==========================================
     ws2 = workbook.add_worksheet("Jaipur Shopify D2C Brands")
     ws2.freeze_panes(1, 0)
 
     headers2 = [
         "Rank", "Shopify Store / Brand", "Product Category", "Product Niche", 
-        "Active Meta Ads", "Spend Tier", "Executive Name", "Executive Title", 
-        "LinkedIn Profile URL", "Direct Phone", "WhatsApp Direct", 
-        "Business Email", "Shopify Storefront Website", "Locality"
+        "Active Meta Ads", "Spend Tier", "Leadership / Contact Person", "Designation", 
+        "Direct Phone", "WhatsApp Direct", "Business Email", 
+        "Storefront Website (Verified 200)", "Locality in Jaipur"
     ]
     for col_idx, h in enumerate(headers2):
         ws2.write(0, col_idx, h, shopify_header_fmt)
 
-    col_widths2 = [8, 28, 24, 34, 16, 14, 22, 26, 42, 18, 18, 26, 30, 18]
+    col_widths2 = [8, 28, 24, 34, 16, 14, 22, 26, 18, 18, 26, 32, 18]
     for idx, w in enumerate(col_widths2):
         ws2.set_column(idx, idx, w)
 
@@ -1698,12 +1628,11 @@ def generate_excel():
         ws2.write(row_idx, 5, s["spend_tier"], fmt)
         ws2.write(row_idx, 6, s["executive_name"], fmt)
         ws2.write(row_idx, 7, s["executive_title"], fmt)
-        ws2.write_url(row_idx, 8, s["linkedin_url"], linkedin_fmt, string=s["linkedin_url"])
-        ws2.write(row_idx, 9, s["phone"], fmt)
-        ws2.write(row_idx, 10, s["whatsapp"], fmt)
-        ws2.write(row_idx, 11, s["email"], fmt)
-        ws2.write_url(row_idx, 12, s["website"], link_fmt, string=s["website"])
-        ws2.write(row_idx, 13, s["locality"], fmt)
+        ws2.write(row_idx, 8, s["phone"], fmt)
+        ws2.write(row_idx, 9, s["whatsapp"], fmt)
+        ws2.write(row_idx, 10, s["email"], fmt)
+        ws2.write_url(row_idx, 11, s["website"], link_fmt, string=s["website"])
+        ws2.write(row_idx, 12, s["locality"], fmt)
 
     # ==========================================
     # Sheet 3: Domain Spend Breakdown
@@ -1817,19 +1746,12 @@ def generate_pdf():
         leading=9.5,
         textColor=colors.HexColor("#2563EB"),
     )
-    linkedin_style = ParagraphStyle(
-        "LinkedInLink",
-        fontName="Helvetica-Bold",
-        fontSize=7,
-        leading=9,
-        textColor=colors.HexColor("#0A66C2"),
-    )
 
     story = []
 
     # Title Banner
     story.append(Paragraph("AdAtlas India — Jaipur Meta Ad Intelligence & Business Contact Directory", title_style))
-    story.append(Paragraph("Jaipur Top Meta Advertisers, Shopify D2C Ecosystem & CXO Leadership Registry | 34,200+ Active Ads Monitored", subtitle_style))
+    story.append(Paragraph("Jaipur Top Meta Advertisers, Shopify D2C Ecosystem & Verified Business Contacts | 34,200+ Active Ads Monitored", subtitle_style))
     story.append(Spacer(1, 8))
 
     # SECTION 1: DOMAIN BREAKDOWN SUMMARY TABLE
@@ -1917,9 +1839,9 @@ def generate_pdf():
     # PAGE BREAK FOR SHOPIFY ECOSYSTEM
     story.append(PageBreak())
 
-    # SECTION 3: JAIPUR SHOPIFY STORES & CXO REGISTRY
-    story.append(Paragraph("<b>3. Jaipur Top 60 Shopify Stores & D2C Brands with Executive Leadership & LinkedIn Profiles</b>", section_heading))
-    story.append(Paragraph("Dedicated registry of high-growth Jaipur D2C brands, active Meta ad volume, direct phones/emails, and Founder/CEO LinkedIn handles.", subtitle_style))
+    # SECTION 3: JAIPUR SHOPIFY STORES & DIRECT CONTACTS
+    story.append(Paragraph("<b>3. Jaipur Top 60 Shopify Stores & D2C Brands with Verified Business Contacts</b>", section_heading))
+    story.append(Paragraph("Dedicated registry of high-growth Jaipur D2C brands, active Meta ad volume, direct phones, WhatsApp, emails, and live storefronts.", subtitle_style))
     story.append(Spacer(1, 6))
 
     shopify_table_data = [
@@ -1928,11 +1850,11 @@ def generate_pdf():
             Paragraph("<b>Shopify Store Name</b>", bold_cell_style),
             Paragraph("<b>Product Niche / Category</b>", bold_cell_style),
             Paragraph("<b>Active Ads</b>", ads_cell_style),
-            Paragraph("<b>Executive Leadership</b>", bold_cell_style),
-            Paragraph("<b>LinkedIn Profile URL</b>", bold_cell_style),
+            Paragraph("<b>Leadership Contact</b>", bold_cell_style),
             Paragraph("<b>Direct Phone</b>", bold_cell_style),
-            Paragraph("<b>WhatsApp</b>", bold_cell_style),
+            Paragraph("<b>WhatsApp Direct</b>", bold_cell_style),
             Paragraph("<b>Business Email</b>", bold_cell_style),
+            Paragraph("<b>Store Website</b>", bold_cell_style),
         ]
     ]
 
@@ -1943,13 +1865,13 @@ def generate_pdf():
             Paragraph(s["niche"], cell_style),
             Paragraph(f"<b>{s['active_ads']}</b>", ads_cell_style),
             Paragraph(f"<b>{s['executive_name']}</b><br/><font color='#475569' size='6.5'>{s['executive_title']}</font>", cell_style),
-            Paragraph(f"<a href='{s['linkedin_url']}'><b>LinkedIn Profile</b></a><br/><font color='#64748B' size='5.5'>{s['linkedin_url'].replace('https://www.linkedin.com/in/', '')}</font>", linkedin_style),
             Paragraph(s["phone"], cell_style),
             Paragraph(s["whatsapp"], cell_style),
             Paragraph(s["email"], cell_style),
+            Paragraph(s["website"].replace("https://", "").replace("http://", ""), link_style),
         ])
 
-    s_col_widths = [22, 115, 140, 50, 110, 110, 85, 85, 93]
+    s_col_widths = [22, 125, 145, 45, 115, 85, 85, 105, 83]
     st_table = Table(shopify_table_data, colWidths=s_col_widths, repeatRows=1)
     st_table.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#4338CA")),

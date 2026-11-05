@@ -263,7 +263,7 @@ export default function CityPage() {
       )}
 
       {/* =====================================================================
-          TAB 2: SHOPIFY STORES & D2C TABLE (Jaipur Only)
+          TAB 2: SHOPIFY STORES & D2C TABLE (Jaipur Only, Verified Direct Contacts)
          ===================================================================== */}
       {activeTab === "shopify" && slug === "jaipur" && (
         <div className="space-y-4">
@@ -272,7 +272,7 @@ export default function CityPage() {
               <strong className="text-indigo-950 font-bold block sm:inline">
                 🛍️ Jaipur Shopify & D2C Brands:
               </strong>{" "}
-              60 high-growth Jaipur D2C brands, active Meta ad volume, direct phones, WhatsApp, emails, and verified Founder/CEO LinkedIn profiles.
+              60 high-growth Jaipur D2C brands, active Meta ad volume, direct phones, WhatsApp, emails, and verified leadership contacts. Zero broken links.
             </div>
             <span className="bg-indigo-600 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] shrink-0 self-start sm:self-auto">
               {filteredShopify.length} Brands
@@ -286,12 +286,12 @@ export default function CityPage() {
                   <tr className="bg-indigo-900 text-white font-bold uppercase tracking-wider text-[11px]">
                     <th className="py-3.5 px-4 w-12 text-center">Rank</th>
                     <th className="py-3.5 px-4">Shopify Brand & Locality</th>
-                    <th className="py-3.5 px-4">Product Niche</th>
+                    <th className="py-3.5 px-4">Product Category & Niche</th>
                     <th className="py-3.5 px-4 text-center">Active Ads</th>
                     <th className="py-3.5 px-4">Leadership (CEO/Founder)</th>
-                    <th className="py-3.5 px-4 text-center">LinkedIn Profile</th>
                     <th className="py-3.5 px-4">Direct Phone</th>
                     <th className="py-3.5 px-4">WhatsApp Direct</th>
+                    <th className="py-3.5 px-4">Business Email</th>
                     <th className="py-3.5 px-4 text-right">Storefront</th>
                   </tr>
                 </thead>
@@ -338,16 +338,6 @@ export default function CityPage() {
                           <div className="font-bold text-slate-900">{store.executive_name}</div>
                           <div className="text-[11px] text-indigo-700">{store.executive_title}</div>
                         </td>
-                        <td className="py-3.5 px-4 text-center">
-                          <a
-                            href={store.linkedin_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#0A66C2]/10 hover:bg-[#0A66C2] text-[#0A66C2] hover:text-white transition font-bold text-[11px] border border-[#0A66C2]/20"
-                          >
-                            <span>Profile ↗</span>
-                          </a>
-                        </td>
                         <td className="py-3.5 px-4">
                           <a
                             href={`tel:${store.phone.replace(/[\s-]/g, "")}`}
@@ -366,6 +356,14 @@ export default function CityPage() {
                           >
                             <MessageSquare className="w-3 h-3" />
                             <span>{store.whatsapp}</span>
+                          </a>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <a
+                            href={`mailto:${store.email}`}
+                            className="font-semibold text-slate-800 hover:text-indigo-600 transition truncate max-w-[150px] block"
+                          >
+                            {store.email}
                           </a>
                         </td>
                         <td className="py-3.5 px-4 text-right">

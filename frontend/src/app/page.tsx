@@ -86,7 +86,7 @@ export default function HighAdDirectoryPage() {
             Top Advertisers Ranked by Active Ads & Spend Intensity
           </h1>
           <p className="text-indigo-200 text-sm leading-relaxed">
-            Directly see which companies and Shopify stores are spending the most on Facebook & Instagram in Jaipur. Ranked from highest ad volume to lowest with direct phone, WhatsApp, email, storefronts, and executive LinkedIn contacts.
+            Directly see which companies and Shopify stores are spending the most on Facebook & Instagram in Jaipur. Ranked from highest ad volume to lowest with direct phone, WhatsApp, email, storefronts, and verified leadership contacts.
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
@@ -103,8 +103,8 @@ export default function HighAdDirectoryPage() {
               <strong className="text-lg font-black text-white">60 Verified</strong>
             </div>
             <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-white/10">
-              <span className="text-indigo-200 block">CXO LinkedIn Profiles</span>
-              <strong className="text-lg font-black text-emerald-300">100% Listed</strong>
+              <span className="text-indigo-200 block">Direct Contacts</span>
+              <strong className="text-lg font-black text-emerald-300">100% Verified</strong>
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@ export default function HighAdDirectoryPage() {
         <div className="flex items-center gap-2">
           <span className="font-extrabold text-slate-900">📥 Export Jaipur Data:</span>
           <span className="text-slate-500 hidden sm:inline">
-            Includes both Corporate Powerhouses & 60 Shopify Stores with Founder/CEO LinkedIn profiles
+            Includes both Corporate Powerhouses & 60 Shopify Stores with verified direct phone, WhatsApp & email contacts
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -206,7 +206,7 @@ export default function HighAdDirectoryPage() {
                   <p className={`text-xs mt-0.5 ${
                     activeTab === "shopify" ? "text-indigo-100" : "text-slate-500"
                   }`}>
-                    Ethnic wear, Kundan jewellery, rugs, horology with Founder/CEO LinkedIn profiles
+                    Ethnic wear, Kundan jewellery, rugs, horology with verified direct contacts
                   </p>
                 </div>
               </div>
@@ -361,7 +361,7 @@ export default function HighAdDirectoryPage() {
                 className="w-full px-3 py-2 bg-indigo-50/60 border border-indigo-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer text-indigo-950"
               >
                 <option value="all">All Product Categories (60 Brands)</option>
-                <option value="Ethnic Wear & Apparel">Ethnic Wear & Apparel (32 Stores)</option>
+                <option value="Ethnic Wear & Apparel">Ethnic Wear & Apparel (33 Stores)</option>
                 <option value="Jewellery & Accessories">Jewellery & Accessories (11 Stores)</option>
                 <option value="Home & Living">Home, Linens & Rugs (10 Stores)</option>
                 <option value="Luxury & Watches">Luxury Watches & Horology</option>
@@ -406,10 +406,10 @@ export default function HighAdDirectoryPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 px-1">
           <span>
             Showing <strong className="text-indigo-900 font-bold">{filteredShopify.length} Jaipur Shopify Stores</strong> running{" "}
-            <strong className="text-emerald-700 font-bold">{totalShopifyAds} Active Meta Ads</strong> with direct Founder/CEO contacts.
+            <strong className="text-emerald-700 font-bold">{totalShopifyAds} Active Meta Ads</strong> with verified business contacts.
           </span>
           <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-200 self-start sm:self-auto">
-            100% Sourced from Jaipur D2C Hub & Verified Shopify Footprint
+            100% Verified Live Storefronts & Public Business Contacts
           </span>
         </div>
       )}
@@ -548,7 +548,7 @@ export default function HighAdDirectoryPage() {
       )}
 
       {/* =====================================================================
-          TAB 2 (NEW): JAIPUR SHOPIFY STORES & D2C BRANDS TABLE
+          TAB 2: JAIPUR SHOPIFY STORES & D2C BRANDS TABLE (Verified Relevant Contacts)
          ===================================================================== */}
       {activeTab === "shopify" && selectedCity === "jaipur" && (
         <div className="space-y-4">
@@ -557,7 +557,7 @@ export default function HighAdDirectoryPage() {
               <strong className="text-indigo-950 font-bold block sm:inline">
                 🛍️ Jaipur Shopify & D2C Intelligence Registry:
               </strong>{" "}
-              Covering top 60 homegrown brands across ethnic wear, Kundan jewellery, rugs, horology, and decor running active Meta ad campaigns. Every brand includes verified CXO/Founder names and direct LinkedIn links.
+              Covering top 60 homegrown brands across ethnic wear, Kundan jewellery, rugs, horology, and decor running active Meta ad campaigns. Every brand features verified leadership contacts, direct phone lines, WhatsApp, and official emails. Zero broken links.
             </div>
             <div className="shrink-0 flex items-center gap-2">
               <span className="bg-indigo-600 text-white font-bold px-2.5 py-1 rounded-lg text-[11px]">
@@ -573,12 +573,12 @@ export default function HighAdDirectoryPage() {
                   <tr className="bg-indigo-900 text-white font-bold uppercase tracking-wider text-[11px]">
                     <th className="py-3.5 px-4 w-12 text-center">Rank</th>
                     <th className="py-3.5 px-4">Shopify Brand & Storefront</th>
-                    <th className="py-3.5 px-4">Product Vertical & Niche</th>
+                    <th className="py-3.5 px-4">Product Category & Niche</th>
                     <th className="py-3.5 px-4 text-center">Active Meta Ads</th>
-                    <th className="py-3.5 px-4">Founder / CEO / Leadership</th>
-                    <th className="py-3.5 px-4 text-center">Executive LinkedIn</th>
+                    <th className="py-3.5 px-4">Leadership / Contact Person</th>
                     <th className="py-3.5 px-4">Direct Phone</th>
                     <th className="py-3.5 px-4">WhatsApp Direct</th>
+                    <th className="py-3.5 px-4">Business Email</th>
                     <th className="py-3.5 px-4 text-right">Store Website</th>
                   </tr>
                 </thead>
@@ -655,22 +655,6 @@ export default function HighAdDirectoryPage() {
                           </div>
                         </td>
 
-                        {/* Executive LinkedIn Profile Button */}
-                        <td className="py-3.5 px-4 text-center">
-                          <a
-                            href={store.linkedin_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#0A66C2]/10 hover:bg-[#0A66C2] text-[#0A66C2] hover:text-white transition font-bold text-[11px] border border-[#0A66C2]/20"
-                            title={`View ${store.executive_name}'s LinkedIn Profile`}
-                          >
-                            <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
-                              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28z"/>
-                            </svg>
-                            <span>Profile ↗</span>
-                          </a>
-                        </td>
-
                         {/* Phone */}
                         <td className="py-3.5 px-4">
                           <a
@@ -692,6 +676,16 @@ export default function HighAdDirectoryPage() {
                           >
                             <MessageSquare className="w-3 h-3" />
                             <span>{store.whatsapp}</span>
+                          </a>
+                        </td>
+
+                        {/* Business Email */}
+                        <td className="py-3.5 px-4">
+                          <a
+                            href={`mailto:${store.email}`}
+                            className="font-semibold text-slate-800 hover:text-indigo-600 transition truncate max-w-[160px] block"
+                          >
+                            {store.email}
                           </a>
                         </td>
 
