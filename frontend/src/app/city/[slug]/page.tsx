@@ -5,9 +5,11 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { 
   Phone, Mail, MessageSquare, Globe, MapPin, 
-  ExternalLink, ArrowLeft, Table, BarChart3, LayoutGrid, Flame
+  ExternalLink, ArrowLeft, Table, BarChart3, LayoutGrid, Flame,
+  ShoppingBag, CheckCircle2, ArrowUpRight
 } from "lucide-react";
 import { ALL_COMPANIES, getJaipurDomainBreakdown, DomainSummary } from "@/data/advertisers";
+import { JAIPUR_SHOPIFY_STORES, ShopifyStore } from "@/data/shopify_advertisers";
 
 const CITIES = [
   { slug: "jaipur", name: "Jaipur" },
@@ -23,14 +25,22 @@ export default function CityPage() {
   const router = useRouter();
   const slug = ((params?.slug as string) || "jaipur").toLowerCase();
 
-  const [activeTab, setActiveTab] = useState<"leaderboard" | "domain_table" | "cards">("leaderboard");
+  const [activeTab, setActiveTab] = useState<"leaderboard" | "shopify" | "domain_table" | "cards">("leaderboard");
   const [domainFilter, setDomainFilter] = useState<string>("all");
+  const [shopifyCategoryFilter, setShopifyCategoryFilter] = useState<string>("all");
 
   const domainSummaries: DomainSummary[] = getJaipurDomainBreakdown();
 
   const filtered = ALL_COMPANIES.filter((item) => {
     if (slug !== "all" && item.city !== slug) return false;
     if (domainFilter !== "all" && item.domain_group !== domainFilter) return false;
+    return true;
+  }).sort((a, b) => b.active_ads - a.active_ads);
+
+  const filteredShopify = JAIPUR_SHOPIFY_STORES.filter((store) => {
+    if (shopifyCategoryFilter !== "all" && store.category !== shopifyCategoryFilter) {
+      return false;
+    }
     return true;
   }).sort((a, b) => b.active_ads - a.active_ads);
 
@@ -84,12 +94,12 @@ export default function CityPage() {
             Top Advertisers & Ad Spend in {cityName}
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Tracking {filtered.length} major companies accounting for {totalAds} active ads, ranked from highest to lowest.
+            Tracking {filtered.length} major corporate companies and {slug === "jaipur" ? "60 Shopify stores" : "local advertisers"} ranked from highest to lowest active ads.
           </p>
         </div>
 
         {/* View Switcher */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold shrink-0 self-start sm:self-auto">
+        <div className="flex flex-wrap items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold shrink-0 self-start sm:self-auto gap-1">
           <button
             onClick={() => setActiveTab("leaderboard")}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-lg transition cursor-pointer ${
@@ -99,6 +109,20 @@ export default function CityPage() {
             <Table className="w-3.5 h-3.5" />
             <span>Leaderboard</span>
           </button>
+
+          {/* Shopify Tab (Jaipur Only) */}
+          {slug === "jaipur" && (
+            <button
+              onClick={() => setActiveTab("shopify")}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                activeTab === "shopify" ? "bg-indigo-600 text-white shadow-xs" : "text-indigo-700 hover:bg-indigo-50"
+              }`}
+            >
+              <ShoppingBag className="w-3.5 h-3.5" />
+              <span>Shopify & D2C (60)</span>
+            </button>
+          )}
+
           <button
             onClick={() => setActiveTab("domain_table")}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-lg transition cursor-pointer ${
@@ -239,7 +263,134 @@ export default function CityPage() {
       )}
 
       {/* =====================================================================
-          TAB 2: DOMAIN BREAKDOWN
+          TAB 2: SHOPIFY STORES & D2C TABLE (Jaipur Only)
+         ===================================================================== */}
+      {activeTab === "shopify" && slug === "jaipur" && (
+        <div className="space-y-4">
+          <div className="bg-indigo-50/70 border border-indigo-200 p-4 rounded-2xl text-xs text-indigo-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <strong className="text-indigo-950 font-bold block sm:inline">
+                🛍️ Jaipur Shopify & D2C Brands:
+              </strong>{" "}
+              60 high-growth Jaipur D2C brands, active Meta ad volume, direct phones, WhatsApp, emails, and verified Founder/CEO LinkedIn profiles.
+            </div>
+            <span className="bg-indigo-600 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] shrink-0 self-start sm:self-auto">
+              {filteredShopify.length} Brands
+            </span>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-indigo-900 text-white font-bold uppercase tracking-wider text-[11px]">
+                    <th className="py-3.5 px-4 w-12 text-center">Rank</th>
+                    <th className="py-3.5 px-4">Shopify Brand & Locality</th>
+                    <th className="py-3.5 px-4">Product Niche</th>
+                    <th className="py-3.5 px-4 text-center">Active Ads</th>
+                    <th className="py-3.5 px-4">Leadership (CEO/Founder)</th>
+                    <th className="py-3.5 px-4 text-center">LinkedIn Profile</th>
+                    <th className="py-3.5 px-4">Direct Phone</th>
+                    <th className="py-3.5 px-4">WhatsApp Direct</th>
+                    <th className="py-3.5 px-4 text-right">Storefront</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 font-medium">
+                  {filteredShopify.map((store, index) => {
+                    const maxAds = filteredShopify[0]?.active_ads || 145;
+                    const barWidthPercent = Math.round((store.active_ads / maxAds) * 100);
+
+                    return (
+                      <tr key={store.id} className="hover:bg-indigo-50/40 transition group">
+                        <td className="py-3.5 px-4 text-center font-extrabold text-slate-700">
+                          <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-black bg-indigo-50 text-indigo-700">
+                            #{index + 1}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-extrabold text-slate-900 text-sm group-hover:text-indigo-600 transition">
+                              {store.name}
+                            </span>
+                            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              Shopify
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-slate-500 text-[11px] mt-0.5">
+                            <MapPin className="w-3 h-3 text-slate-400" />
+                            <span>{store.locality}, Jaipur</span>
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4 max-w-[180px]">
+                          <span className="font-semibold text-slate-800 block">{store.category}</span>
+                          <span className="text-[11px] text-slate-500 block truncate">{store.niche}</span>
+                        </td>
+                        <td className="py-3.5 px-4 text-center min-w-[120px]">
+                          <div className="flex items-center justify-center gap-1.5 font-black text-slate-900">
+                            <Flame className="w-3.5 h-3.5 text-amber-500 fill-current" />
+                            <span>{store.active_ads} Ads</span>
+                          </div>
+                          <div className="w-full bg-slate-100 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                            <div className="bg-indigo-600 h-full rounded-full" style={{ width: `${barWidthPercent}%` }} />
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <div className="font-bold text-slate-900">{store.executive_name}</div>
+                          <div className="text-[11px] text-indigo-700">{store.executive_title}</div>
+                        </td>
+                        <td className="py-3.5 px-4 text-center">
+                          <a
+                            href={store.linkedin_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#0A66C2]/10 hover:bg-[#0A66C2] text-[#0A66C2] hover:text-white transition font-bold text-[11px] border border-[#0A66C2]/20"
+                          >
+                            <span>Profile ↗</span>
+                          </a>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <a
+                            href={`tel:${store.phone.replace(/[\s-]/g, "")}`}
+                            className="font-bold text-slate-900 hover:text-indigo-600 transition inline-flex items-center gap-1"
+                          >
+                            <Phone className="w-3 h-3 text-indigo-600" />
+                            <span>{store.phone}</span>
+                          </a>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <a
+                            href={`https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="font-bold text-emerald-700 hover:text-emerald-800 transition inline-flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200"
+                          >
+                            <MessageSquare className="w-3 h-3" />
+                            <span>{store.whatsapp}</span>
+                          </a>
+                        </td>
+                        <td className="py-3.5 px-4 text-right">
+                          <a
+                            href={store.website}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-indigo-600 hover:underline font-bold"
+                          >
+                            <span>Store</span>
+                            <ArrowUpRight className="w-3.5 h-3.5" />
+                          </a>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          TAB 3: DOMAIN BREAKDOWN
          ===================================================================== */}
       {activeTab === "domain_table" && (
         <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
@@ -250,35 +401,33 @@ export default function CityPage() {
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
                 <th className="py-3.5 px-4">Domain / Industry</th>
-                <th className="py-3.5 px-4 text-center">Tracked Companies</th>
+                <th className="py-3.5 px-4 text-center">Tracked Brands</th>
                 <th className="py-3.5 px-4 text-center">Total Active Ads</th>
-                <th className="py-3.5 px-4 text-center">Ad Share %</th>
-                <th className="py-3.5 px-4 text-center">Spend Intensity</th>
-                <th className="py-3.5 px-4">Top Spending Company</th>
+                <th className="py-3.5 px-4 text-center">Jaipur Share</th>
+                <th className="py-3.5 px-4 text-center">Avg Ads/Brand</th>
+                <th className="py-3.5 px-4">Highest Spender</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium">
               {domainSummaries.map((dom, index) => (
-                <tr key={dom.name} className="hover:bg-slate-50/80 transition">
-                  <td className="py-3.5 px-4 font-bold text-slate-900 text-sm">
+                <tr key={dom.name} className="hover:bg-slate-50 transition">
+                  <td className="py-3.5 px-4 font-bold text-slate-900">
                     #{index + 1} {dom.name}
                   </td>
                   <td className="py-3.5 px-4 text-center font-bold text-slate-700">
                     {dom.company_count} Brands
                   </td>
-                  <td className="py-3.5 px-4 text-center font-black text-indigo-700 text-sm">
-                    🔥 {dom.total_active_ads} Ads
+                  <td className="py-3.5 px-4 text-center font-black text-indigo-700">
+                    {dom.total_active_ads} Ads
                   </td>
                   <td className="py-3.5 px-4 text-center font-extrabold text-slate-900">
                     {dom.share_percent}%
                   </td>
-                  <td className="py-3.5 px-4 text-center">
-                    <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                      {dom.spend_intensity}
-                    </span>
+                  <td className="py-3.5 px-4 text-center font-bold text-slate-800">
+                    {dom.avg_ads_per_company}
                   </td>
                   <td className="py-3.5 px-4 font-bold text-slate-900">
-                    ⭐ {dom.top_advertiser}
+                    {dom.top_advertiser}
                   </td>
                 </tr>
               ))}
@@ -288,7 +437,7 @@ export default function CityPage() {
       )}
 
       {/* =====================================================================
-          TAB 3: CONTACT CARDS VIEW
+          TAB 4: CONTACT CARDS
          ===================================================================== */}
       {activeTab === "cards" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -311,71 +460,54 @@ export default function CityPage() {
                         <MapPin className="w-3 h-3" />
                         <span>{co.locality}, {co.city_name}</span>
                       </span>
-                      <span className="text-[11px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md font-medium">
+                      <span className="text-[11px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md font-medium">
                         {co.domain_group}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end shrink-0 gap-1">
-                  <span className="inline-flex items-center gap-1 text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-300 px-2.5 py-1 rounded-xl shadow-2xs">
-                    <Flame className="w-3.5 h-3.5 text-emerald-600 fill-current" />
-                    <span>{co.active_ads} Ads</span>
-                  </span>
-                </div>
+                <span className="inline-flex items-center gap-1 text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-300 px-2.5 py-1 rounded-xl">
+                  <Flame className="w-3.5 h-3.5 text-emerald-600 fill-current" />
+                  <span>{co.active_ads} Ads</span>
+                </span>
               </div>
-
-              <p className="text-xs text-slate-600 italic bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                "{co.ad_headline}"
-              </p>
 
               <div className="space-y-2 pt-1 border-t border-slate-100 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500 font-medium flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5 text-indigo-600" />
-                    <span>Phone</span>
-                  </span>
-                  <a href={`tel:${co.phone.replace(/[\s-]/g, "")}`} className="font-bold text-slate-900 hover:text-indigo-600 transition">
+                  <span className="text-slate-500 font-medium">Phone</span>
+                  <a href={`tel:${co.phone.replace(/[\s-]/g, "")}`} className="font-bold text-slate-900">
                     {co.phone}
                   </a>
                 </div>
-
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500 font-medium flex items-center gap-1.5">
-                    <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>WhatsApp</span>
-                  </span>
-                  <a href={`https://wa.me/${co.whatsapp.replace(/[^0-9]/g, "")}`} target="_blank" rel="noreferrer" className="font-bold text-emerald-700 hover:underline flex items-center gap-1">
-                    <span>{co.whatsapp}</span>
-                    <ExternalLink className="w-3 h-3" />
+                  <span className="text-slate-500 font-medium">WhatsApp</span>
+                  <a
+                    href={`https://wa.me/${co.whatsapp.replace(/[^0-9]/g, "")}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-bold text-emerald-700 hover:underline"
+                  >
+                    {co.whatsapp}
                   </a>
                 </div>
-
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500 font-medium flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 text-sky-600" />
-                    <span>Email</span>
-                  </span>
-                  <a href={`mailto:${co.email}`} className="font-semibold text-slate-800 hover:text-indigo-600 transition truncate max-w-[220px]">
+                  <span className="text-slate-500 font-medium">Email</span>
+                  <a href={`mailto:${co.email}`} className="font-semibold text-slate-800 truncate max-w-[220px]">
                     {co.email}
                   </a>
                 </div>
-
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500 font-medium flex items-center gap-1.5">
-                    <Globe className="w-3.5 h-3.5 text-slate-600" />
-                    <span>Website</span>
-                  </span>
-                  <a href={co.website} target="_blank" rel="noreferrer" className="font-semibold text-indigo-600 hover:underline flex items-center gap-1 truncate max-w-[220px]">
+                  <span className="text-slate-500 font-medium">Website</span>
+                  <a
+                    href={co.website}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-semibold text-indigo-600 hover:underline flex items-center gap-1"
+                  >
                     <span>{co.website.replace("https://", "")}</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
-                </div>
-
-                <div className="pt-1.5 border-t border-slate-100 flex items-start gap-1.5 text-slate-500 text-[11px] leading-relaxed">
-                  <MapPin className="w-3 h-3 text-slate-400 shrink-0 mt-0.5" />
-                  <span>{co.address}</span>
                 </div>
               </div>
             </div>

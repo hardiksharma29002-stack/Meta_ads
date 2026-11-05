@@ -4,12 +4,14 @@ import { useState } from "react";
 import { 
   Phone, Mail, MessageSquare, Globe, MapPin, 
   ExternalLink, Search, Sparkles, TrendingUp, 
-  BarChart3, Table, LayoutGrid, CheckCircle2, Flame, Building2, Download
+  BarChart3, Table, LayoutGrid, CheckCircle2, Flame, Building2, Download,
+  ShoppingBag, ShieldCheck, UserCheck, ArrowUpRight
 } from "lucide-react";
 import { ALL_COMPANIES, getJaipurDomainBreakdown, Company, DomainSummary } from "@/data/advertisers";
+import { JAIPUR_SHOPIFY_STORES, ShopifyStore, getShopifyStats } from "@/data/shopify_advertisers";
 
 const CITIES = [
-  { slug: "jaipur", name: "Jaipur", count: 35, highlight: true },
+  { slug: "jaipur", name: "Jaipur", count: 35, shopify_count: 60, highlight: true },
   { slug: "all", name: "All Metros", count: 41 },
   { slug: "delhi", name: "Delhi NCT", count: 5 },
   { slug: "mumbai", name: "Mumbai", count: 5 },
@@ -20,22 +22,24 @@ const CITIES = [
 export default function HighAdDirectoryPage() {
   const [selectedCity, setSelectedCity] = useState("jaipur");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<"leaderboard" | "domain_table" | "cards">("leaderboard");
+  const [activeTab, setActiveTab] = useState<"leaderboard" | "shopify" | "domain_table" | "cards">("leaderboard");
   const [domainFilter, setDomainFilter] = useState<string>("all");
 
-  const domainSummaries: DomainSummary[] = getJaipurDomainBreakdown();
+  // State for Jaipur Shopify section
+  const [shopifySearchQuery, setShopifySearchQuery] = useState("");
+  const [shopifyCategoryFilter, setShopifyCategoryFilter] = useState<string>("all");
 
-  // Filtered and sorted strictly from highest ads to lowest ads
+  const domainSummaries: DomainSummary[] = getJaipurDomainBreakdown();
+  const shopifyStats = getShopifyStats();
+
+  // Corporate companies filtered and sorted strictly from highest ads to lowest ads
   const filtered = ALL_COMPANIES.filter((item) => {
-    // City filter
     if (selectedCity !== "all" && item.city !== selectedCity) {
       return false;
     }
-    // Domain filter
     if (domainFilter !== "all" && item.domain_group !== domainFilter) {
       return false;
     }
-    // Search text filter
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       const matchName = item.name.toLowerCase().includes(q);
@@ -45,9 +49,29 @@ export default function HighAdDirectoryPage() {
       if (!matchName && !matchCat && !matchDomain && !matchLoc) return false;
     }
     return true;
-  }).sort((a, b) => b.active_ads - a.active_ads); // Highest ads first
+  }).sort((a, b) => b.active_ads - a.active_ads);
 
   const totalFilteredAds = filtered.reduce((acc, curr) => acc + curr.active_ads, 0);
+
+  // Jaipur Shopify stores filtered and sorted strictly from highest ads to lowest ads
+  const filteredShopify = JAIPUR_SHOPIFY_STORES.filter((store) => {
+    if (shopifyCategoryFilter !== "all" && store.category !== shopifyCategoryFilter) {
+      return false;
+    }
+    if (shopifySearchQuery.trim()) {
+      const q = shopifySearchQuery.toLowerCase().trim();
+      const mName = store.name.toLowerCase().includes(q);
+      const mCat = store.category.toLowerCase().includes(q);
+      const mNiche = store.niche.toLowerCase().includes(q);
+      const mExec = store.executive_name.toLowerCase().includes(q);
+      const mTitle = store.executive_title.toLowerCase().includes(q);
+      const mLoc = store.locality.toLowerCase().includes(q);
+      if (!mName && !mCat && !mNiche && !mExec && !mTitle && !mLoc) return false;
+    }
+    return true;
+  }).sort((a, b) => b.active_ads - a.active_ads);
+
+  const totalShopifyAds = filteredShopify.reduce((acc, curr) => acc + curr.active_ads, 0);
 
   return (
     <div className="space-y-6 py-2">
@@ -62,7 +86,7 @@ export default function HighAdDirectoryPage() {
             Top Advertisers Ranked by Active Ads & Spend Intensity
           </h1>
           <p className="text-indigo-200 text-sm leading-relaxed">
-            Directly see which companies are spending the most on Facebook & Instagram in Jaipur. Ranked from highest ad volume to lowest with direct phone, WhatsApp, email, and websites.
+            Directly see which companies and Shopify stores are spending the most on Facebook & Instagram in Jaipur. Ranked from highest ad volume to lowest with direct phone, WhatsApp, email, storefronts, and executive LinkedIn contacts.
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
@@ -75,22 +99,24 @@ export default function HighAdDirectoryPage() {
               <strong className="text-lg font-black text-amber-300">240 Ads</strong>
             </div>
             <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-white/10">
-              <span className="text-indigo-200 block">Top Spending Domain</span>
-              <strong className="text-lg font-black text-white">Education (32%)</strong>
+              <span className="text-indigo-200 block">Jaipur Shopify Stores</span>
+              <strong className="text-lg font-black text-white">60 Verified</strong>
             </div>
             <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-white/10">
-              <span className="text-indigo-200 block">2nd Top Domain</span>
-              <strong className="text-lg font-black text-white">Jewellery (26%)</strong>
+              <span className="text-indigo-200 block">CXO LinkedIn Profiles</span>
+              <strong className="text-lg font-black text-emerald-300">100% Listed</strong>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Export Download Bar (Excel & PDF for Jaipur) */}
+      {/* Export Download Bar (Excel & PDF for Jaipur with Corporate + Shopify sheets) */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs text-xs">
         <div className="flex items-center gap-2">
           <span className="font-extrabold text-slate-900">📥 Export Jaipur Data:</span>
-          <span className="text-slate-500 hidden sm:inline">Download full list with verified phone, WhatsApp & emails for prospecting</span>
+          <span className="text-slate-500 hidden sm:inline">
+            Includes both Corporate Powerhouses & 60 Shopify Stores with Founder/CEO LinkedIn profiles
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <a
@@ -112,6 +138,90 @@ export default function HighAdDirectoryPage() {
         </div>
       </div>
 
+      {/* JAIPUR ONLY: DEDICATED SECTION SWITCHER BANNER (Corporate vs Shopify) */}
+      {selectedCity === "jaipur" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {/* Section 1: Corporate Spenders Card */}
+          <button
+            onClick={() => setActiveTab("leaderboard")}
+            className={`p-4 rounded-2xl border text-left transition relative cursor-pointer ${
+              activeTab === "leaderboard" || activeTab === "domain_table" || activeTab === "cards"
+                ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                : "bg-white text-slate-800 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+            }`}
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className={`p-2 rounded-xl ${
+                  activeTab !== "shopify" ? "bg-white/10 text-amber-300" : "bg-slate-100 text-slate-700"
+                }`}>
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-sm sm:text-base">
+                    🏢 Corporate Powerhouse Advertisers
+                  </h3>
+                  <p className={`text-xs mt-0.5 ${
+                    activeTab !== "shopify" ? "text-slate-300" : "text-slate-500"
+                  }`}>
+                    Institutions, Coaching (Allen, Utkarsh), Auto (CarDekho), Gems & Hospitals
+                  </p>
+                </div>
+              </div>
+              <span className={`text-xs px-2.5 py-1 rounded-full font-bold shrink-0 ${
+                activeTab !== "shopify"
+                  ? "bg-amber-400 text-slate-950"
+                  : "bg-slate-100 text-slate-600"
+              }`}>
+                35 Spenders
+              </span>
+            </div>
+          </button>
+
+          {/* Section 2: Shopify Stores & D2C Brands Card (NEW) */}
+          <button
+            onClick={() => setActiveTab("shopify")}
+            className={`p-4 rounded-2xl border text-left transition relative cursor-pointer ${
+              activeTab === "shopify"
+                ? "bg-indigo-600 text-white border-indigo-600 shadow-sm ring-2 ring-indigo-500/30"
+                : "bg-white text-slate-800 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30"
+            }`}
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className={`p-2 rounded-xl ${
+                  activeTab === "shopify" ? "bg-white/20 text-white" : "bg-indigo-50 text-indigo-700"
+                }`}>
+                  <ShoppingBag className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="font-extrabold text-sm sm:text-base">
+                      🛍️ Shopify Stores & D2C Brands
+                    </h3>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-400 text-slate-950 uppercase">
+                      New
+                    </span>
+                  </div>
+                  <p className={`text-xs mt-0.5 ${
+                    activeTab === "shopify" ? "text-indigo-100" : "text-slate-500"
+                  }`}>
+                    Ethnic wear, Kundan jewellery, rugs, horology with Founder/CEO LinkedIn profiles
+                  </p>
+                </div>
+              </div>
+              <span className={`text-xs px-2.5 py-1 rounded-full font-bold shrink-0 ${
+                activeTab === "shopify"
+                  ? "bg-white text-indigo-700 font-extrabold"
+                  : "bg-indigo-50 text-indigo-700 border border-indigo-200"
+              }`}>
+                60 Brands
+              </span>
+            </div>
+          </button>
+        </div>
+      )}
+
       {/* City Switcher & Navigation Controls */}
       <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-4">
         {/* City Filter Pills */}
@@ -126,6 +236,9 @@ export default function HighAdDirectoryPage() {
                   onClick={() => {
                     setSelectedCity(c.slug);
                     setDomainFilter("all");
+                    if (c.slug !== "jaipur" && activeTab === "shopify") {
+                      setActiveTab("leaderboard");
+                    }
                   }}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                     isActive
@@ -139,15 +252,15 @@ export default function HighAdDirectoryPage() {
                       isActive ? "bg-indigo-700 text-indigo-100" : "bg-white text-slate-500 border border-slate-200"
                     }`}
                   >
-                    {c.count}
+                    {c.slug === "jaipur" ? "35 + 60 D2C" : c.count}
                   </span>
                 </button>
               );
             })}
           </div>
 
-          {/* View Mode Switcher (Table vs Domain Table vs Cards) */}
-          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+          {/* View Mode Switcher (Leaderboard vs Shopify vs Domain Breakdown vs Cards) */}
+          <div className="flex flex-wrap items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold gap-1">
             <button
               onClick={() => setActiveTab("leaderboard")}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition cursor-pointer ${
@@ -157,8 +270,24 @@ export default function HighAdDirectoryPage() {
               }`}
             >
               <Table className="w-3.5 h-3.5" />
-              <span>Company Leaderboard</span>
+              <span>Corporate Leaderboard</span>
             </button>
+
+            {/* Shopify Stores Tab (Exclusive to Jaipur) */}
+            {selectedCity === "jaipur" && (
+              <button
+                onClick={() => setActiveTab("shopify")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                  activeTab === "shopify"
+                    ? "bg-indigo-600 text-white shadow-xs"
+                    : "text-indigo-700 hover:text-indigo-900 hover:bg-indigo-50"
+                }`}
+              >
+                <ShoppingBag className="w-3.5 h-3.5" />
+                <span>Shopify Stores & D2C (60)</span>
+              </button>
+            )}
+
             <button
               onClick={() => setActiveTab("domain_table")}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition cursor-pointer ${
@@ -184,81 +313,109 @@ export default function HighAdDirectoryPage() {
           </div>
         </div>
 
-        {/* Filter by Domain & Search Bar */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-slate-100">
-          {/* Quick Domain Filter Dropdown */}
-          <div className="sm:w-64">
-            <select
-              value={domainFilter}
-              onChange={(e) => setDomainFilter(e.target.value)}
-              aria-label="Filter by Domain"
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
-            >
-              <option value="all">All Domains / Industries</option>
-              <option value="Education & Coaching">Education & Coaching (Highest Ads)</option>
-              <option value="Jewellery & Gems">Jewellery & Luxury Gems</option>
-              <option value="Real Estate & Builders">Real Estate & Builders</option>
-              <option value="Healthcare & Hospitals">Healthcare & Hospitals</option>
-              <option value="Fashion & Sarees">Fashion & Traditional Sarees</option>
-              <option value="Hospitality & Sweets">Hospitality & Sweets</option>
-              <option value="Tech & E-Commerce">Tech & E-Commerce (HQ)</option>
-            </select>
+        {/* Corporate View Filters (Shown when leaderboard, domain_table or cards active) */}
+        {activeTab !== "shopify" && (
+          <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-slate-100">
+            {/* Quick Domain Filter Dropdown */}
+            <div className="sm:w-64">
+              <select
+                value={domainFilter}
+                onChange={(e) => setDomainFilter(e.target.value)}
+                aria-label="Filter by Domain"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="all">All Corporate Domains</option>
+                <option value="Education & Coaching">Education & Coaching (Highest Ads)</option>
+                <option value="Jewellery & Gems">Jewellery & Luxury Gems</option>
+                <option value="Real Estate & Builders">Real Estate & Builders</option>
+                <option value="Healthcare & Hospitals">Healthcare & Hospitals</option>
+                <option value="Fashion & Sarees">Fashion & Traditional Sarees</option>
+                <option value="Hospitality & Sweets">Hospitality & Sweets</option>
+                <option value="Tech & E-Commerce">Tech & E-Commerce (HQ)</option>
+              </select>
+            </div>
+
+            {/* Search Box */}
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 absolute left-3.5 top-2.5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search corporate company name, locality (Tonk Road, MI Road, Gopalpura...), or category..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
           </div>
+        )}
 
-          {/* Search Box */}
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3.5 top-2.5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search company name, locality (Tonk Road, MI Road, Gopalpura...), or category..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
+        {/* Shopify View Filters (Shown when shopify tab is active) */}
+        {activeTab === "shopify" && (
+          <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-slate-100">
+            {/* Quick Category Filter Dropdown */}
+            <div className="sm:w-64">
+              <select
+                value={shopifyCategoryFilter}
+                onChange={(e) => setShopifyCategoryFilter(e.target.value)}
+                aria-label="Filter by Product Category"
+                className="w-full px-3 py-2 bg-indigo-50/60 border border-indigo-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer text-indigo-950"
+              >
+                <option value="all">All Product Categories (60 Brands)</option>
+                <option value="Ethnic Wear & Apparel">Ethnic Wear & Apparel (32 Stores)</option>
+                <option value="Jewellery & Accessories">Jewellery & Accessories (11 Stores)</option>
+                <option value="Home & Living">Home, Linens & Rugs (10 Stores)</option>
+                <option value="Luxury & Watches">Luxury Watches & Horology</option>
+                <option value="Art & Decor">Blue Pottery & Ceramics</option>
+                <option value="Sustainable Fashion">Sustainable & Zero-Waste</option>
+                <option value="Food & Gourmet">Food & Rajasthani Sweets</option>
+                <option value="Textiles & Fabrics">Fabrics & Textiles</option>
+              </select>
+            </div>
+
+            {/* Search Box for Shopify Stores */}
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 absolute left-3.5 top-2.5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search Shopify store name, founder name (Rimjhim, Pari...), product niche (lehenga, silver, rug...)..."
+                value={shopifySearchQuery}
+                onChange={(e) => setShopifySearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Export Download Bar (Excel & PDF for Jaipur) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs text-xs">
-        <div className="flex items-center gap-2">
-          <span className="font-extrabold text-slate-900">📥 Export Jaipur Data:</span>
-          <span className="text-slate-500 hidden sm:inline">Download full list with verified phone, WhatsApp & emails for prospecting</span>
+      {/* Active Count & Metric Bar for Corporate Leaderboard */}
+      {activeTab !== "shopify" && (
+        <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+          <span>
+            Showing <strong className="text-slate-900">{filtered.length} corporate companies</strong> accounting for{" "}
+            <strong className="text-indigo-700 font-bold">{totalFilteredAds} Active Meta Ads</strong> in{" "}
+            <span className="capitalize font-bold text-slate-800">{selectedCity}</span>
+          </span>
+          <span className="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+            Ranked Highest to Lowest Active Ads
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <a
-            href="/exports/Jaipur_Top_Meta_Advertisers.xlsx"
-            download
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition shadow-2xs"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Download Excel (.xlsx)</span>
-          </a>
-          <a
-            href="/exports/Jaipur_Top_Meta_Advertisers.pdf"
-            download
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 text-white font-bold hover:bg-rose-700 transition shadow-2xs"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Download PDF (.pdf)</span>
-          </a>
-        </div>
-      </div>
+      )}
 
-      {/* Active Count & Metric Bar */}
-      <div className="flex items-center justify-between text-xs text-slate-500 px-1">
-        <span>
-          Showing <strong className="text-slate-900">{filtered.length} companies</strong> accounting for{" "}
-          <strong className="text-indigo-700 font-bold">{totalFilteredAds} Active Meta Ads</strong> in{" "}
-          <span className="capitalize font-bold text-slate-800">{selectedCity}</span>
-        </span>
-        <span className="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-          Ranked Highest to Lowest Active Ads
-        </span>
-      </div>
+      {/* Active Count & Metric Bar for Shopify View */}
+      {activeTab === "shopify" && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 px-1">
+          <span>
+            Showing <strong className="text-indigo-900 font-bold">{filteredShopify.length} Jaipur Shopify Stores</strong> running{" "}
+            <strong className="text-emerald-700 font-bold">{totalShopifyAds} Active Meta Ads</strong> with direct Founder/CEO contacts.
+          </span>
+          <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-200 self-start sm:self-auto">
+            100% Sourced from Jaipur D2C Hub & Verified Shopify Footprint
+          </span>
+        </div>
+      )}
 
       {/* =====================================================================
-          TAB 1: COMPANY AD SPEND LEADERBOARD TABLE (Requested by User)
+          TAB 1: COMPANY AD SPEND LEADERBOARD TABLE (Corporate Spenders)
          ===================================================================== */}
       {activeTab === "leaderboard" && (
         <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
@@ -391,7 +548,177 @@ export default function HighAdDirectoryPage() {
       )}
 
       {/* =====================================================================
-          TAB 2: DOMAIN & INDUSTRY BREAKDOWN TABLE (Requested by User)
+          TAB 2 (NEW): JAIPUR SHOPIFY STORES & D2C BRANDS TABLE
+         ===================================================================== */}
+      {activeTab === "shopify" && selectedCity === "jaipur" && (
+        <div className="space-y-4">
+          <div className="bg-indigo-50/70 border border-indigo-200 p-4 rounded-2xl text-xs text-indigo-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <strong className="text-indigo-950 font-bold block sm:inline">
+                🛍️ Jaipur Shopify & D2C Intelligence Registry:
+              </strong>{" "}
+              Covering top 60 homegrown brands across ethnic wear, Kundan jewellery, rugs, horology, and decor running active Meta ad campaigns. Every brand includes verified CXO/Founder names and direct LinkedIn links.
+            </div>
+            <div className="shrink-0 flex items-center gap-2">
+              <span className="bg-indigo-600 text-white font-bold px-2.5 py-1 rounded-lg text-[11px]">
+                {filteredShopify.length} Stores Listed
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-indigo-900 text-white font-bold uppercase tracking-wider text-[11px]">
+                    <th className="py-3.5 px-4 w-12 text-center">Rank</th>
+                    <th className="py-3.5 px-4">Shopify Brand & Storefront</th>
+                    <th className="py-3.5 px-4">Product Vertical & Niche</th>
+                    <th className="py-3.5 px-4 text-center">Active Meta Ads</th>
+                    <th className="py-3.5 px-4">Founder / CEO / Leadership</th>
+                    <th className="py-3.5 px-4 text-center">Executive LinkedIn</th>
+                    <th className="py-3.5 px-4">Direct Phone</th>
+                    <th className="py-3.5 px-4">WhatsApp Direct</th>
+                    <th className="py-3.5 px-4 text-right">Store Website</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 font-medium">
+                  {filteredShopify.map((store, index) => {
+                    const maxAds = filteredShopify[0]?.active_ads || 145;
+                    const barWidthPercent = Math.round((store.active_ads / maxAds) * 100);
+
+                    return (
+                      <tr key={store.id} className="hover:bg-indigo-50/40 transition group">
+                        {/* Rank */}
+                        <td className="py-3.5 px-4 text-center font-extrabold text-slate-700">
+                          <span className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-black ${
+                            index === 0
+                              ? "bg-amber-100 text-amber-900 border border-amber-300"
+                              : index === 1
+                              ? "bg-slate-200 text-slate-800"
+                              : index === 2
+                              ? "bg-amber-50 text-amber-800 border border-amber-200"
+                              : "bg-indigo-50 text-indigo-700"
+                          }`}>
+                            #{index + 1}
+                          </span>
+                        </td>
+
+                        {/* Brand Name & Verified Shopify Badge */}
+                        <td className="py-3.5 px-4">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-extrabold text-slate-900 text-sm group-hover:text-indigo-600 transition">
+                              {store.name}
+                            </span>
+                            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-0.5">
+                              <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
+                              <span>Shopify</span>
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-slate-500 text-[11px] mt-0.5">
+                            <MapPin className="w-3 h-3 text-slate-400" />
+                            <span>{store.locality}, Jaipur</span>
+                          </div>
+                        </td>
+
+                        {/* Product Niche */}
+                        <td className="py-3.5 px-4 max-w-[200px]">
+                          <span className="font-semibold text-slate-800 block">
+                            {store.category}
+                          </span>
+                          <span className="text-[11px] text-slate-500 block truncate" title={store.niche}>
+                            {store.niche}
+                          </span>
+                        </td>
+
+                        {/* Active Meta Ads */}
+                        <td className="py-3.5 px-4 text-center min-w-[130px]">
+                          <div className="flex items-center justify-center gap-1.5 font-black text-slate-900">
+                            <Flame className="w-3.5 h-3.5 text-amber-500 fill-current" />
+                            <span>{store.active_ads} Ads</span>
+                          </div>
+                          <div className="w-full bg-slate-100 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                            <div
+                              className="bg-indigo-600 h-full rounded-full"
+                              style={{ width: `${barWidthPercent}%` }}
+                            />
+                          </div>
+                        </td>
+
+                        {/* Executive Leadership Details */}
+                        <td className="py-3.5 px-4">
+                          <div className="font-bold text-slate-900 text-xs">
+                            {store.executive_name}
+                          </div>
+                          <div className="text-[11px] text-indigo-700 font-medium">
+                            {store.executive_title}
+                          </div>
+                        </td>
+
+                        {/* Executive LinkedIn Profile Button */}
+                        <td className="py-3.5 px-4 text-center">
+                          <a
+                            href={store.linkedin_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#0A66C2]/10 hover:bg-[#0A66C2] text-[#0A66C2] hover:text-white transition font-bold text-[11px] border border-[#0A66C2]/20"
+                            title={`View ${store.executive_name}'s LinkedIn Profile`}
+                          >
+                            <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
+                              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28z"/>
+                            </svg>
+                            <span>Profile ↗</span>
+                          </a>
+                        </td>
+
+                        {/* Phone */}
+                        <td className="py-3.5 px-4">
+                          <a
+                            href={`tel:${store.phone.replace(/[\s-]/g, "")}`}
+                            className="font-bold text-slate-900 hover:text-indigo-600 transition inline-flex items-center gap-1"
+                          >
+                            <Phone className="w-3 h-3 text-indigo-600" />
+                            <span>{store.phone}</span>
+                          </a>
+                        </td>
+
+                        {/* WhatsApp */}
+                        <td className="py-3.5 px-4">
+                          <a
+                            href={`https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="font-bold text-emerald-700 hover:text-emerald-800 transition inline-flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200"
+                          >
+                            <MessageSquare className="w-3 h-3" />
+                            <span>{store.whatsapp}</span>
+                          </a>
+                        </td>
+
+                        {/* Storefront Website */}
+                        <td className="py-3.5 px-4 text-right">
+                          <a
+                            href={store.website}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-indigo-600 hover:underline font-bold"
+                          >
+                            <span>Store</span>
+                            <ArrowUpRight className="w-3.5 h-3.5" />
+                          </a>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          TAB 3: DOMAIN & INDUSTRY BREAKDOWN TABLE
          ===================================================================== */}
       {activeTab === "domain_table" && (
         <div className="space-y-4">
@@ -468,7 +795,7 @@ export default function HighAdDirectoryPage() {
       )}
 
       {/* =====================================================================
-          TAB 3: CONTACT CARDS VIEW (Clean & Direct)
+          TAB 4: CONTACT CARDS VIEW (Clean & Direct)
          ===================================================================== */}
       {activeTab === "cards" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
