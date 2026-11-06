@@ -9,6 +9,7 @@ containing:
 
 import os
 import sys
+import re
 
 # Ensure UTF-8 output on Windows
 if sys.platform == "win32":
@@ -1565,6 +1566,16 @@ def generate_excel():
         "border": 1,
         "border_color": "#E2E8F0",
     })
+    wa_fmt = workbook.add_format({
+        "font_color": "#047857",
+        "underline": True,
+        "bold": True,
+        "font_name": "Calibri",
+        "font_size": 10,
+        "valign": "vcenter",
+        "border": 1,
+        "border_color": "#E2E8F0",
+    })
 
     # ==========================================
     # Sheet 1: Jaipur Corporate Advertisers
@@ -1574,18 +1585,21 @@ def generate_excel():
 
     headers1 = [
         "Rank", "Company Name", "Industry / Domain", "Category", 
-        "Active Meta Ads", "Spend Tier", "Direct Phone", "WhatsApp", 
-        "Official Email", "Website", "Locality in Jaipur", "Full Address"
+        "Active Meta Ads", "Spend Tier", "Direct Phone (Clickable)", "WhatsApp Direct (Clickable)", 
+        "Official Email (Clickable)", "Website (Clickable)", "Locality in Jaipur", "Full Address"
     ]
     for col_idx, h in enumerate(headers1):
         ws1.write(0, col_idx, h, header_fmt)
 
-    col_widths1 = [8, 30, 22, 28, 16, 14, 18, 18, 28, 25, 20, 45]
+    col_widths1 = [8, 30, 22, 28, 16, 14, 20, 22, 28, 25, 20, 45]
     for idx, w in enumerate(col_widths1):
         ws1.set_column(idx, idx, w)
 
     for row_idx, item in enumerate(JAIPUR_COMPANIES, start=1):
         fmt = zebra_fmt if row_idx % 2 == 0 else row_fmt
+        clean_phone = re.sub(r"[^\d+]", "", item["phone"])
+        clean_wa = re.sub(r"\D", "", item["whatsapp"])
+
         ws1.write(row_idx, 0, f"#{item['rank']}", rank_fmt)
         ws1.write(row_idx, 1, item["name"], fmt)
         ws1.write(row_idx, 2, item["domain"], fmt)
@@ -1593,8 +1607,8 @@ def generate_excel():
         ws1.write(row_idx, 4, item["active_ads"], ads_fmt)
         ws1.write(row_idx, 5, item["spend_tier"], fmt)
         ws1.write(row_idx, 6, item["phone"], fmt)
-        ws1.write(row_idx, 7, item["whatsapp"], fmt)
-        ws1.write(row_idx, 8, item["email"], fmt)
+        ws1.write_url(row_idx, 7, f"https://wa.me/{clean_wa}", wa_fmt, string=item["whatsapp"])
+        ws1.write_url(row_idx, 8, f"mailto:{item['email']}", link_fmt, string=item["email"])
         ws1.write_url(row_idx, 9, item["website"], link_fmt, string=item["website"])
         ws1.write(row_idx, 10, item["locality"], fmt)
         ws1.write(row_idx, 11, item["address"], fmt)
@@ -1608,18 +1622,21 @@ def generate_excel():
     headers2 = [
         "Rank", "Shopify Store / Brand", "Product Category", "Product Niche", 
         "Active Meta Ads", "Spend Tier", "Leadership / Contact Person", "Designation", 
-        "Direct Phone", "WhatsApp Direct", "Business Email", 
+        "Direct Phone", "WhatsApp Direct (Click to Chat)", "Business Email (Click to Mail)", 
         "Storefront Website (Verified 200)", "Locality in Jaipur"
     ]
     for col_idx, h in enumerate(headers2):
         ws2.write(0, col_idx, h, shopify_header_fmt)
 
-    col_widths2 = [8, 28, 24, 34, 16, 14, 22, 26, 18, 18, 26, 32, 18]
+    col_widths2 = [8, 28, 24, 34, 16, 14, 22, 26, 20, 22, 26, 32, 18]
     for idx, w in enumerate(col_widths2):
         ws2.set_column(idx, idx, w)
 
     for row_idx, s in enumerate(JAIPUR_SHOPIFY_STORES, start=1):
         fmt = zebra_fmt if row_idx % 2 == 0 else row_fmt
+        clean_s_phone = re.sub(r"[^\d+]", "", s["phone"])
+        clean_s_wa = re.sub(r"\D", "", s["whatsapp"])
+
         ws2.write(row_idx, 0, f"#{s['rank']}", rank_fmt)
         ws2.write(row_idx, 1, s["name"], fmt)
         ws2.write(row_idx, 2, s["category"], fmt)
@@ -1629,8 +1646,8 @@ def generate_excel():
         ws2.write(row_idx, 6, s["executive_name"], fmt)
         ws2.write(row_idx, 7, s["executive_title"], fmt)
         ws2.write(row_idx, 8, s["phone"], fmt)
-        ws2.write(row_idx, 9, s["whatsapp"], fmt)
-        ws2.write(row_idx, 10, s["email"], fmt)
+        ws2.write_url(row_idx, 9, f"https://wa.me/{clean_s_wa}", wa_fmt, string=s["whatsapp"])
+        ws2.write_url(row_idx, 10, f"mailto:{s['email']}", link_fmt, string=s["email"])
         ws2.write_url(row_idx, 11, s["website"], link_fmt, string=s["website"])
         ws2.write(row_idx, 12, s["locality"], fmt)
 
@@ -1804,23 +1821,27 @@ def generate_pdf():
             Paragraph("<b>Active Ads</b>", ads_cell_style),
             Paragraph("<b>Spend Tier</b>", rank_cell_style),
             Paragraph("<b>Direct Phone</b>", bold_cell_style),
-            Paragraph("<b>WhatsApp</b>", bold_cell_style),
+            Paragraph("<b>WhatsApp Direct</b>", bold_cell_style),
             Paragraph("<b>Official Email</b>", bold_cell_style),
             Paragraph("<b>Website</b>", bold_cell_style),
         ]
     ]
 
     for item in JAIPUR_COMPANIES:
+        clean_phone = re.sub(r"[^\d+]", "", item["phone"])
+        clean_wa = re.sub(r"\D", "", item["whatsapp"])
+        domain_name = item["website"].replace("https://", "").replace("http://", "")
+
         table_data.append([
             Paragraph(f"#{item['rank']}", rank_cell_style),
             Paragraph(f"<b>{item['name']}</b><br/><font color='#64748B' size='6.5'>{item['locality']}</font>", cell_style),
             Paragraph(item["domain"], cell_style),
             Paragraph(f"<b>{item['active_ads']}</b>", ads_cell_style),
             Paragraph(item["spend_tier"], rank_cell_style),
-            Paragraph(item["phone"], cell_style),
-            Paragraph(item["whatsapp"], cell_style),
-            Paragraph(item["email"], cell_style),
-            Paragraph(item["website"].replace("https://", ""), link_style),
+            Paragraph(f'<a href="tel:{clean_phone}"><font color="#0F172A"><b>{item["phone"]}</b></font></a>', cell_style),
+            Paragraph(f'<a href="https://wa.me/{clean_wa}"><font color="#047857"><b>{item["whatsapp"]}</b></font></a>', cell_style),
+            Paragraph(f'<a href="mailto:{item["email"]}"><font color="#2563EB">{item["email"]}</font></a>', cell_style),
+            Paragraph(f'<a href="{item["website"]}"><font color="#2563EB"><u>{domain_name}</u></font></a>', link_style),
         ])
 
     col_widths = [22, 175, 105, 50, 60, 95, 95, 125, 83]
@@ -1859,16 +1880,20 @@ def generate_pdf():
     ]
 
     for s in JAIPUR_SHOPIFY_STORES:
+        clean_s_phone = re.sub(r"[^\d+]", "", s["phone"])
+        clean_s_wa = re.sub(r"\D", "", s["whatsapp"])
+        s_domain = s["website"].replace("https://", "").replace("http://", "")
+
         shopify_table_data.append([
             Paragraph(f"#{s['rank']}", rank_cell_style),
             Paragraph(f"<b>{s['name']}</b><br/><font color='#64748B' size='6.5'>{s['locality']}</font>", cell_style),
             Paragraph(s["niche"], cell_style),
             Paragraph(f"<b>{s['active_ads']}</b>", ads_cell_style),
             Paragraph(f"<b>{s['executive_name']}</b><br/><font color='#475569' size='6.5'>{s['executive_title']}</font>", cell_style),
-            Paragraph(s["phone"], cell_style),
-            Paragraph(s["whatsapp"], cell_style),
-            Paragraph(s["email"], cell_style),
-            Paragraph(s["website"].replace("https://", "").replace("http://", ""), link_style),
+            Paragraph(f'<a href="tel:{clean_s_phone}"><font color="#0F172A"><b>{s["phone"]}</b></font></a>', cell_style),
+            Paragraph(f'<a href="https://wa.me/{clean_s_wa}"><font color="#047857"><b>{s["whatsapp"]}</b></font></a>', cell_style),
+            Paragraph(f'<a href="mailto:{s["email"]}"><font color="#2563EB">{s["email"]}</font></a>', cell_style),
+            Paragraph(f'<a href="{s["website"]}"><font color="#2563EB"><u>{s_domain}</u></font></a>', link_style),
         ])
 
     s_col_widths = [22, 125, 145, 45, 115, 85, 85, 105, 83]
