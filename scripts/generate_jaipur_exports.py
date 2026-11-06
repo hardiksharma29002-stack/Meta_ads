@@ -30,8 +30,10 @@ from reportlab.platypus import (
 
 EXPORT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../exports"))
 FRONTEND_PUBLIC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../frontend/public/exports"))
+ROOT_PUBLIC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../public/exports"))
 os.makedirs(EXPORT_DIR, exist_ok=True)
 os.makedirs(FRONTEND_PUBLIC_DIR, exist_ok=True)
+os.makedirs(ROOT_PUBLIC_DIR, exist_ok=True)
 
 JAIPUR_COMPANIES = [
     {
@@ -1680,10 +1682,15 @@ def generate_excel():
 
     workbook.close()
 
-    # Also copy to frontend public directory
+    # Also copy to frontend public directory and root public directory
     public_target = os.path.join(FRONTEND_PUBLIC_DIR, "Jaipur_Top_Meta_Advertisers.xlsx")
-    with open(filepath, "rb") as f_in, open(public_target, "wb") as f_out:
-        f_out.write(f_in.read())
+    root_public_target = os.path.join(ROOT_PUBLIC_DIR, "Jaipur_Top_Meta_Advertisers.xlsx")
+    with open(filepath, "rb") as f_in:
+        content = f_in.read()
+    with open(public_target, "wb") as f_out:
+        f_out.write(content)
+    with open(root_public_target, "wb") as f_out:
+        f_out.write(content)
 
     print(f"✔ Excel written cleanly: {filepath}")
     print(f"✔ Excel copied to frontend: {public_target}")
@@ -1918,10 +1925,15 @@ def generate_pdf():
 
     doc.build(story)
 
-    # Also copy to frontend public directory
+    # Also copy to frontend public directory and root public directory
     public_target = os.path.join(FRONTEND_PUBLIC_DIR, "Jaipur_Top_Meta_Advertisers.pdf")
-    with open(filepath, "rb") as f_in, open(public_target, "wb") as f_out:
-        f_out.write(f_in.read())
+    root_public_target = os.path.join(ROOT_PUBLIC_DIR, "Jaipur_Top_Meta_Advertisers.pdf")
+    with open(filepath, "rb") as f_in:
+        content = f_in.read()
+    with open(public_target, "wb") as f_out:
+        f_out.write(content)
+    with open(root_public_target, "wb") as f_out:
+        f_out.write(content)
 
     print(f"✔ PDF written cleanly: {filepath}")
     print(f"✔ PDF copied to frontend: {public_target}")
